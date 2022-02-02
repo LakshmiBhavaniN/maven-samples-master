@@ -1,41 +1,27 @@
-pipeline 
-{
+pipeline {
     agent any
-
-    stages 
-    {
-        stage('Build') 
-        {
-            steps 
-            {
-                echo 'Build App'
+    stages {
+        stage('git repo & clean') {
+            steps {
+               bat "rmdir  /s /q maven-samples-master"
+                bat "git clone https://github.com/lakshmiKrishnaa/maven-samples-master.git"
+                bat "mvn clean -f maven-samples-master"
             }
         }
-
-        stage('Test') 
-        {
-            steps 
-            {
-                echo 'Test App'
+        stage('install') {
+            steps {
+                bat "mvn install -f maven-samples-master"
             }
         }
-
-        stage('Deploy') 
-        {
-            steps 
-            {
-                echo 'Deploy App'
+        stage('test') {
+            steps {
+                bat "mvn test -f maven-samples-master"
             }
         }
-    }
-
-    post
-    {
-
-    	always
-    	{
-    		emailext body: 'Summary', subject: 'Pipeline Status', to: 'selenium3bymukesh@gmail.com'
-    	}
-
+        stage('package') {
+            steps {
+                bat "mvn package -f maven-samples-master"
+            }
+        }
     }
 }
