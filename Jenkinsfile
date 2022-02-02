@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('git repo & clean') {
             steps {
-              
+                bat "rmdir  /s /q maven-samples-master"
                 bat "git clone https://github.com/lakshmiKrishnaa/maven-samples-master.git"
                 bat "mvn clean -f maven-samples-master"
             }
